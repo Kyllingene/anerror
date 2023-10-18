@@ -1,8 +1,12 @@
 [package]
 name = "anerror"
-version = "0.1.0"
+version = "1.0.0"
 edition = "2021"
+
+authors = ["Kyllingene"]
+license = "MIT"
 
 [dependencies]
 anerror-macros = { path = "anerror-macros" }
 anerror-error = { path = "anerror-error" }
+

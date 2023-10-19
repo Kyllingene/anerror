@@ -5,11 +5,10 @@ edition = "2021"
 
 authors = ["Kyllingene"]
 license = "MIT"
-description = "Ergonomic pretty error handling for Rust binaries."
+description = "Ergonomic pretty error handling for binaries."
 
 [dependencies]
-#errata-macros = "1.0"
-errata-macros = { path = "errata-macros" }
+errata-macros = "0.1.0"
 
 [workspace]
 members = ["errata-macros"]

@@ -51,7 +51,7 @@ If you want to throw errors at arbitrary points, you may also use the `error!` m
 
 ## Normal panics
 
-Normal panics, such as those caused by `unwrap`, `expect`, and `panic!`, are handled as well. It print's an error message akin to that produced by Rust, with location of error as well as an optional backtrace. This ensures that unexpected errors still give useful errors.
+Normal panics, such as those caused by `unwrap`, `expect`, and `panic!`, are handled as well. It prints an error message akin to that produced by Rust, with location of error as well as an optional backtrace. This ensures that unexpected errors still give you useful information.
 
 ## Color
 

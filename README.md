@@ -55,7 +55,7 @@ Normal panics, such as those caused by `unwrap`, `expect`, and `panic!`, are han
 
 ## Color
 
-There is also basic color support in the forms of `fail_color` and `error_color!`, both of which print their error messages in bold red. If more diverse color support is something you want to see, feel free to submit a PR or an issue.
+You can enable color via the feature flag `color`, which changes `fail` and `error!` to both print in bold red. If more diverse builtin color support is something you want to see, feel free to submit a PR or an issue.
 
 ## How it works
 

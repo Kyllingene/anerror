@@ -12,12 +12,11 @@
 //!
 //! This unlocks pretty-printing for your error messages. For `Option` and
 //! `Result` (as long as the `Err` variant implements `Display`), you can use
-//! [`fail`](FallibleExt::fail) or [`fail_color`](FallibleExt::fail_color) as
-//! drop-in replacements for `expect`. You can continue to use `unwrap` and
-//! `expect` where you don't expect any errors, and you will continue to get
-//! useful debug information just like normal.
+//! [`fail`](FallibleExt::fail) as a drop-in replacement for `expect`. You can
+//! continue to use `unwrap` and `expect` where you don't expect any errors,
+//! and you will continue to get useful debug information just like normal.
 //!
-//! If you wish to throw your own errors, see [`error`] and [`error_color`].
+//! If you wish to throw your own errors, see [`error`].
 
 use std::fmt::Display;
 
@@ -35,6 +34,9 @@ impl Display for ErrataPanic {
 
 /// Exits the program cleanly, calling destructors and printing an error message.
 /// Uses the same syntax as `format`.
+///
+/// If you enable feature `color`, prints in bold red.
+#[cfg(not(feature = "color"))]
 #[macro_export]
 macro_rules! error {
     ($($arg:tt),*) => {
@@ -42,20 +44,24 @@ macro_rules! error {
     }
 }
 
-/// Exits the program cleanly, calling destructors and printing an error message
-/// in bold red. Uses the same syntax as `format`.
+/// Exits the program cleanly, calling destructors and printing an error message.
+/// Uses the same syntax as `format`.
+///
+/// If you enable feature `color`, prints in bold red.
+#[cfg(feature = "color")]
 #[macro_export]
-macro_rules! error_color {
+macro_rules! error {
     ($($arg:tt),*) => {
         std::panic::panic_any($crate::ErrataPanic(format!("\x1b[38;5;1m\x1b[1m{}\x1b[0m", format!($($arg),*))));
     }
 }
 
-/// The trait providing [`fail`](FallibleExt::fail) and
-/// [`fail_color`](FallibleExt::fail_color). Implemented for `Option<T>` and
-/// `Result<T, E: Display>`.
+/// The trait providing [`fail`](FallibleExt::fail).
+/// Implemented for `Option<T>` and `Result<T, E: Display>`.
 pub trait FallibleExt<T> {
     /// Exits the program cleanly, calling destructors and printing an error message.
+    ///
+    /// If you enable feature `color`, prints in bold red.
     ///
     /// Usage:
     /// ```no_run
@@ -66,21 +72,10 @@ pub trait FallibleExt<T> {
     /// bad.fail("Expected bad to contain a value");
     /// ```
     fn fail(self, msg: impl Display) -> T;
-    /// Exits the program cleanly, calling destructors and printing an error message
-    /// in bold red.
-    ///
-    /// Usage:
-    /// ```no_run
-    /// # use errata::FallibleExt;
-    /// let bad: Option<i32> = None;
-    ///
-    /// // Prints the text in bold red to stderr, then exits with code 1.
-    /// bad.fail_color("Expected bad to contain a value");
-    /// ```
-    fn fail_color(self, msg: impl Display) -> T;
 }
 
 impl<T> FallibleExt<T> for Option<T> {
+    #[cfg(not(feature = "color"))]
     fn fail(self, msg: impl Display) -> T {
         match self {
             Some(t) => t,
@@ -88,7 +83,8 @@ impl<T> FallibleExt<T> for Option<T> {
         }
     }
 
-    fn fail_color(self, msg: impl Display) -> T {
+    #[cfg(feature = "color")]
+    fn fail(self, msg: impl Display) -> T {
         match self {
             Some(t) => t,
             None => std::panic::panic_any(ErrataPanic(format!("\x1b[38;5;1m\x1b[1m{msg}\x1b[0m"))),
@@ -98,6 +94,7 @@ impl<T> FallibleExt<T> for Option<T> {
 
 // TODO: should there also be impl for E: !Display?
 impl<T, E: Display> FallibleExt<T> for Result<T, E> {
+    #[cfg(not(feature = "color"))]
     fn fail(self, msg: impl Display) -> T {
         match self {
             Ok(t) => t,
@@ -105,7 +102,8 @@ impl<T, E: Display> FallibleExt<T> for Result<T, E> {
         }
     }
 
-    fn fail_color(self, msg: impl Display) -> T {
+    #[cfg(feature = "color")]
+    fn fail(self, msg: impl Display) -> T {
         match self {
             Ok(t) => t,
             Err(e) => std::panic::panic_any(ErrataPanic(format!(

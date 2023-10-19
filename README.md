@@ -1,6 +1,6 @@
-# Anerror
+# Errata
 
-Anerror is a crate to simplify errors in your binary crates. The problem arises in code like this:
+Errata is a crate to simplify errors in your binary crates. The problem arises in code like this:
 
 ```rust
 fn main() {
@@ -21,16 +21,16 @@ note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 
 This is an ugly error. Unfortunately, your only alternative is to add supporting code to make sure that the input is valid, and print a useful error message if it isn't. This can not only get verbose, it's also difficult to get right if you want to call destructors; if you have open files with unflushed changes, those may get lost if you exit the program improperly.
 
-## Enter anerror
+## Enter errata
 
-Anerror gets it right so you don't have to. Using some unwinding magic (see below), anerror catches your panics in a safety net to print them nicely. Since panics (usually) unwind, this calls all the destructors you need, but anerror prints your errors nicely.
+Errata gets it right so you don't have to. Using some unwinding magic (see below), errata catches your panics in a safety net to print them nicely. Since panics (usually) unwind, this calls all the destructors you need, but errata prints your errors nicely.
 
-Here's the previous example with anerror:
+Here's the previous example with errata:
 
 ```rust
-use anerror::FallibleExt;
+use errata::FallibleExt;
 
-#[anerror::catch]
+#[errata::catch]
 fn main() {
     let user_input = "abc";
     let number: i32 = user_input
@@ -59,7 +59,7 @@ There is also basic color support in the forms of `fail_color` and `error_color!
 
 ## How it works
 
-Under the hood, anerror wraps your code in [`catch_unwind`](https://doc.rust_lang.org/std/panic/fn.catch_unwind.html), which just means that it can catch panics and print them nicely before exiting.
+Under the hood, errata wraps your code in [`catch_unwind`](https://doc.rust_lang.org/std/panic/fn.catch_unwind.html), which just means that it can catch panics and print them nicely before exiting.
 
 Since it was ran inside `catch_unwind`, your destructors will be called and your error will be caught. This is accomplished by overriding the default panic handler (to suppress panic messages), handling the error slightly differently depending on its type.
 

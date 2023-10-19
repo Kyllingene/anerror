@@ -1,14 +1,16 @@
 [package]
-name = "anerror"
+name = "errata"
 version = "1.1.0"
 edition = "2021"
 
 authors = ["Kyllingene"]
 license = "MIT"
+description = "Ergonomic pretty error handling for Rust binaries."
 
 [dependencies]
-anerror-macros = { path = "anerror-macros" }
+#errata-macros = "1.0"
+errata-macros = { path = "errata-macros" }
 
 [workspace]
-members = ["anerror-macros"]
+members = ["errata-macros"]
 

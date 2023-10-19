@@ -2,9 +2,9 @@
 //!
 //! First, place the following before your `main` function:
 //! ```rust
-//! use anerror::FallibleExt;
+//! use errata::FallibleExt;
 //!
-//! #[anerror::catch]
+//! #[errata::catch]
 //! fn main() {
 //!     // ...
 //! }
@@ -21,13 +21,13 @@
 
 use std::fmt::Display;
 
-pub use anerror_macros::catch;
+pub use errata_macros::catch;
 
 #[doc(hidden)]
 #[derive(Debug)]
-pub struct AnerrorPanic(pub String);
+pub struct ErrataPanic(pub String);
 
-impl Display for AnerrorPanic {
+impl Display for ErrataPanic {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}", self.0)
     }
@@ -38,7 +38,7 @@ impl Display for AnerrorPanic {
 #[macro_export]
 macro_rules! error {
     ($($arg:tt),*) => {
-        std::panic::panic_any($crate::AnerrorPanic(format!($($arg),*)));
+        std::panic::panic_any($crate::ErrataPanic(format!($($arg),*)));
     }
 }
 
@@ -47,7 +47,7 @@ macro_rules! error {
 #[macro_export]
 macro_rules! error_color {
     ($($arg:tt),*) => {
-        std::panic::panic_any($crate::AnerrorPanic(format!("\x1b[38;5;1m\x1b[1m{}\x1b[0m", format!($($arg),*))));
+        std::panic::panic_any($crate::ErrataPanic(format!("\x1b[38;5;1m\x1b[1m{}\x1b[0m", format!($($arg),*))));
     }
 }
 
@@ -59,7 +59,7 @@ pub trait FallibleExt<T> {
     ///
     /// Usage:
     /// ```no_run
-    /// # use anerror::FallibleExt;
+    /// # use errata::FallibleExt;
     /// let bad: Option<i32> = None;
     ///
     /// // Prints the text verbatim to stderr, then exits with code 1.
@@ -71,7 +71,7 @@ pub trait FallibleExt<T> {
     ///
     /// Usage:
     /// ```no_run
-    /// # use anerror::FallibleExt;
+    /// # use errata::FallibleExt;
     /// let bad: Option<i32> = None;
     ///
     /// // Prints the text in bold red to stderr, then exits with code 1.
@@ -84,14 +84,14 @@ impl<T> FallibleExt<T> for Option<T> {
     fn fail(self, msg: impl Display) -> T {
         match self {
             Some(t) => t,
-            None => std::panic::panic_any(AnerrorPanic(format!("{msg}"))),
+            None => std::panic::panic_any(ErrataPanic(format!("{msg}"))),
         }
     }
 
     fn fail_color(self, msg: impl Display) -> T {
         match self {
             Some(t) => t,
-            None => std::panic::panic_any(AnerrorPanic(format!("\x1b[38;5;1m\x1b[1m{msg}\x1b[0m"))),
+            None => std::panic::panic_any(ErrataPanic(format!("\x1b[38;5;1m\x1b[1m{msg}\x1b[0m"))),
         }
     }
 }
@@ -101,14 +101,14 @@ impl<T, E: Display> FallibleExt<T> for Result<T, E> {
     fn fail(self, msg: impl Display) -> T {
         match self {
             Ok(t) => t,
-            Err(e) => std::panic::panic_any(AnerrorPanic(format!("{msg}: {e}"))),
+            Err(e) => std::panic::panic_any(ErrataPanic(format!("{msg}: {e}"))),
         }
     }
 
     fn fail_color(self, msg: impl Display) -> T {
         match self {
             Ok(t) => t,
-            Err(e) => std::panic::panic_any(AnerrorPanic(format!(
+            Err(e) => std::panic::panic_any(ErrataPanic(format!(
                 "\x1b[38;5;1m\x1b[1m{msg}: {e}\x1b[0m"
             ))),
         }

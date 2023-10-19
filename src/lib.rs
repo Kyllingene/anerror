@@ -21,8 +21,17 @@
 
 use std::fmt::Display;
 
-pub use anerror_error::AnerrorPanic;
 pub use anerror_macros::catch;
+
+#[doc(hidden)]
+#[derive(Debug)]
+pub struct AnerrorPanic(pub String);
+
+impl Display for AnerrorPanic {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.0)
+    }
+}
 
 /// Exits the program cleanly, calling destructors and printing an error message.
 /// Uses the same syntax as `format`.

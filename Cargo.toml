@@ -1,0 +1,8 @@
+[package]
+name = "anerror"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anerror-macros = { path = "anerror-macros" }
+anerror-error = { path = "anerror-error" }

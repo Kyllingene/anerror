@@ -1,0 +1,12 @@
+[package]
+name = "anerror-macros"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+quote = "1.0.33"
+syn = { version = "2.0.38", features = ["full"] }
+anerror-error = { path = "../anerror-error" }
+
+[lib]
+proc-macro = true

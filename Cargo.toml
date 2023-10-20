@@ -1,6 +1,6 @@
 [package]
 name = "errata"
-version = "2.0.0"
+version = "2.1.0"
 edition = "2021"
 
 authors = ["Kyllingene"]
@@ -9,7 +9,7 @@ description = "Ergonomic pretty error handling for binaries."
 repository = "https://github.com/Kyllingene/errata"
 
 [dependencies]
-errata-macros = "0.1.0"
+errata-macros = "0"
 
 [features]
 default = []

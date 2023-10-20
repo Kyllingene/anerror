@@ -106,9 +106,9 @@ impl<T, E: Display> FallibleExt<T> for Result<T, E> {
     fn fail(self, msg: impl Display) -> T {
         match self {
             Ok(t) => t,
-            Err(e) => std::panic::panic_any(ErrataPanic(format!(
-                "\x1b[38;5;1m\x1b[1m{msg}: {e}\x1b[0m"
-            ))),
+            Err(e) => {
+                std::panic::panic_any(ErrataPanic(format!("\x1b[38;5;1m\x1b[1m{msg}: {e}\x1b[0m")))
+            }
         }
     }
 }

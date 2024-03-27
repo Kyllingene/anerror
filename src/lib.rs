@@ -39,8 +39,8 @@ impl Display for ErrataPanic {
 #[cfg(not(feature = "color"))]
 #[macro_export]
 macro_rules! error {
-    ($($arg:tt),*) => {
-        std::panic::panic_any($crate::ErrataPanic(format!($($arg),*)));
+    ($($arg:tt)*) => {
+        std::panic::panic_any($crate::ErrataPanic(format!($($arg)*)));
     }
 }
 
@@ -51,8 +51,8 @@ macro_rules! error {
 #[cfg(feature = "color")]
 #[macro_export]
 macro_rules! error {
-    ($($arg:tt),*) => {
-        std::panic::panic_any($crate::ErrataPanic(format!("\x1b[38;5;1m\x1b[1m{}\x1b[0m", format!($($arg),*))));
+    ($($arg:tt)*) => {
+        std::panic::panic_any($crate::ErrataPanic(format!("\x1b[38;5;1m\x1b[1m{}\x1b[0m", format!($($arg)*))));
     }
 }
 
